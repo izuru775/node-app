@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- get jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>For Geema</title>
+</head>
+<body>
+    <h1>login</h1>
+    <form action="" >
+        <!-- create labales to input fields -->
+        <label for="username">username</label>
+        <input type="text" name="name" id="name" placeholder="name">
+        <label for="email">email</label>
+        <input type="email" name="email" id="email" placeholder="email">
+        <label for="password">password</label>
+        <input type="password" name="password" id="password" placeholder="password">
+        
+        <button type="submit">submit</button>
+    </form>
+
+    
+    <script>
+        // get the form
+        const form = $('form');
+        console.log(form)
+        // add event listener to the form
+        form.on('submit', (e) => {
+            // prevent the default action of the form
+            e.preventDefault();
+            // get input values
+            const name = $('#name').val();
+            const email = $('#email').val();
+            const password = $('#password').val();
+
+            let data = {
+                name,
+                email,
+                password
+            }
+            
+            // send the data to the server
+            $.ajax({
+                url: '/submit',
+                type: 'POST',
+                data: data,
+                success: (data) => {
+                    console.log(data)
+                    // loop through the data array and display it in unordered list 
+                    data.forEach((item) => {
+                        $('body').append(`<ul><li>${item.id}</li><li>${item.name}</li><li>${item.email}</li><li>${item.password}</li><li><button>delete</button></li></ul>`)
+                    })
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            })
+        })
+
+        // add event listener to the delete button
+        $('body').on('click', 'button', (e) => {
+            // get the id of the user
+            const id = $(e.target).parent().prev().prev().prev().prev().text();
+            console.log(id)
+            // send the id to the server
+            $.ajax({
+                url: '/delete',
+                type: 'DELETE',
+                data: {id},
+                success: (data) => {
+                    // refresh the page to display the new data
+                    location.reload();                   
+                },
+                error: (err) => {
+                    console.log(err);
+                }
+            })
+        })
+    </script>
+</body>
+</html>
+

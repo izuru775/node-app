@@ -57,7 +57,6 @@ app.post('/submit', function (req, res) {
     con.query('SELECT * FROM mydb.users', function (err, rows, fields) {
           if (err) throw err;
      
-          // convert rows to json
           res.json( rows );
       });
   
